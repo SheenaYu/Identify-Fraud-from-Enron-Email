@@ -13,5 +13,4 @@ tune supervised classification algorithms
 - `enron_report.pdf`: report to walk readers through this project
 - `references.txt`: Text file listing my references
 - `tools/`: Udacity-provided helper tools and functions
-- `emails_by_address/`: email message data (not used)
 - `poi_email_addresses.py`: code to print dataset email addresses (not used)
