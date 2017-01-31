@@ -1,0 +1,16 @@
+References used in this project:
+
+Scikit-learn Documentation
+http://scikit-learn.org/stable/index.html
+
+Udacity P5 Discussion Forum
+https://discussions.udacity.com/c/nd002-p5-intro-to-machine-learning
+
+Udacity Intro to Machine Learning
+https://www.udacity.com/course/intro-to-machine-learning--ud120
+
+Feature Selection for Machine Learning
+http://machinelearningmastery.com/feature-selection-machine-learning-python/
+
+Model Selection and Feature Selection
+https://www.cs.utah.edu/~piyush/teaching/22-9-print.pdf
