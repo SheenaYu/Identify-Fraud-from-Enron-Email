@@ -13,3 +13,4 @@ tune supervised classification algorithms
 - `tester.py`: Udacity-provided code to gauge algorithm performance
 - `emails_by_address/`: email message data (not used)
 - `poi_email_addresses.py`: code to print dataset email addresses (not used)
+- `enron_report.pdf`: report to walk readers through this project
