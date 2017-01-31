@@ -14,3 +14,4 @@ tune supervised classification algorithms
 - `emails_by_address/`: email message data (not used)
 - `poi_email_addresses.py`: code to print dataset email addresses (not used)
 - `enron_report.pdf`: report to walk readers through this project
+- `references.txt`: Text file listing my references
