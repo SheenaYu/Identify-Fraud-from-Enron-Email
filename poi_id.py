@@ -104,26 +104,35 @@ enron_func.fix_inconsistent_data(data_dict)
 # Feature Engineering and Feature Selection
 
 features_list = enron_func.get_features(data_dict)
-print len(features_list)
+
 
 enron_func.add_poi_pctg_feature(data_dict, features_list)
 enron_func.add_controllable_gain_feature(data_dict, features_list)
 
-# Verify that the two new features are successfully added to data_dict
+## Verify that the two new features are successfully added to data_dict
 pprint.pprint(data_dict["SKILLING JEFFREY K"])
 
-# Add target label to features_list
+## Add target label to features_list
 features_list = ["poi"] + features_list
 
-# Target and features (including two new engineered features)
-print features_list
+## Target and features (including two new engineered features)
+print features_list, len(features_list)
 
-# ############################################################################################################
-
-# Try a varity of classifiers, tune classifiers to achieve better than .3 precision and recall 
 
 ## Copy data_dict to my_dataset for easy export
 my_dataset = data_dict
+## Extract features and labels from dataset for local testing
+data = featureFormat(my_dataset, features_list, sort_keys = True)
+labels, features = targetFeatureSplit(data)
+
+## Get to know predictive powers of each feature
+feature_scores = enron_func.get_k_best(features, labels, features_list, k=20)
+print feature_scores
+
+features_list = ["poi"] + [pair[0] for pair in feature_scores]
+# ############################################################################################################
+
+# Try a varity of classifiers, tune classifiers to achieve better than .3 precision and recall 
 
 
 ## create the classifiers
@@ -176,20 +185,34 @@ params_svm = {
 
 # # run the dataset through each of the six classifiers 
 
-# # logisticRegression Accuracy: 0.86207	Precision: 0.44812	Recall: 0.14900	F1: 0.22364	F2: 0.17196
+# # logisticRegression Accuracy: 0.86207    Precision: 0.44812  Recall: 0.14900 F1: 0.22364 F2: 0.17196
 # enron_func.evaluate_algorithms(my_dataset, features_list, lg, params_lg)
 
-# # Accuracy: 0.86460	Precision: 0.48707	Recall: 0.29200	F1: 0.36511	F2: 0.31743
+# # RandomForest Accuracy: 0.86640   Precision: 0.49829  Recall: 0.29150 F1: 0.36782 F2: 0.31788
 # enron_func.evaluate_algorithms(my_dataset, features_list, rf, params_rf)
 
-# # DecisionTree Accuracy: 0.85027	Precision: 0.43856	Recall: 0.43900	F1: 0.43878	F2: 0.43891
+# # DecisionTree Accuracy: 0.84867  Precision: 0.43263  Recall: 0.43350 F1: 0.43307 F2: 0.43333
 enron_func.evaluate_algorithms(my_dataset, features_list, dt, params_dt)
 
-# # knn Accuracy: 0.86200	Precision: 0.46377	Recall: 0.22400	F1: 0.30209	F2: 0.24983
+# # knn Accuracy: 0.86200   Precision: 0.46377  Recall: 0.22400 F1: 0.30209 F2: 0.24983
 # enron_func.evaluate_algorithms(my_dataset, features_list, knn, params_knn)
 
-# # svm Accuracy: 0.87607	Precision: 0.60383	Recall: 0.20500	F1: 0.30608	F2: 0.23620
+# # svm Accuracy: 0.87607   Precision: 0.60383  Recall: 0.20500 F1: 0.30608 F2: 0.23620
 # enron_func.evaluate_algorithms(my_dataset, features_list, svc, params_svm)
 
-# Accuracy: 0.85013	Precision: 0.41218	Recall: 0.29100	F1: 0.34115	F2: 0.30918
+# Naive Bayes: Accuracy: 0.85013 Precision: 0.41218  Recall: 0.29100 F1: 0.34115 F2: 0.30918
 # enron_func.evaluate_algorithms(my_dataset, features_list, gnb, params_gnb)
+
+# ############################################################################################################
+
+# What if engineered features were not included in the first place?
+original_feature_list = [x for x in features_list if x!="controllable_gain" and x!="poi_pctg"]
+k_range = range(3,12)
+params_dt = {
+        'SKB__k' : k_range,
+        'algo__min_samples_split' : [2, 4, 6, 8, 10, 15, 20, 25, 30],
+        'algo__criterion' : ['gini', 'entropy']
+        }
+
+## Decision Tree without engineered features: Accuracy: 0.80673    Precision: 0.29688  Recall: 0.32850 F1: 0.31189 F2: 0.32165
+# enron_func.evaluate_algorithms(my_dataset, original_features_list, dt, params_dt)

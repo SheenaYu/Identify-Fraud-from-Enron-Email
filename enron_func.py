@@ -224,6 +224,30 @@ def add_controllable_gain_feature(data_dict, features_list):
         person["controllable_gain"] = controllable_gain
     features_list += ["controllable_gain"]
 
+
+
+  
+def get_k_best(features, labels, features_list, k):
+    """
+    Function for selecting our KBest features based on the whole dataset.
+    Args:
+        data_dict: Insiders and their financial and email information
+        features_list: List of features to select from
+        k: Number of best features to select
+    Return: 
+        A sorted list of the KBest feature names and scores
+    """
+    from sklearn.feature_selection import SelectKBest, f_classif
+
+    selector = SelectKBest(f_classif, k=k).fit(features, labels)
+    scores = selector.scores_
+    feature_score = zip(features_list[1:], scores)
+    sorted_feature_score = sorted(feature_score, key=lambda x: x[1], reverse=True)
+    k_sorted_features = sorted_feature_score[:k]
+
+    return k_sorted_features
+
+
 ###########################################################################################################################################
 
 # tune classifier and obtain scores based on parameters above
